@@ -6,6 +6,7 @@ services:
   imse-example:
     build:
       dockerfile: Dockerfile.example
+      # set context for build command explicitly
       context: ./src
     # MATRIKEL_NR is automatically imported from the .env file
     image: imse/${MATRIKEL_NR}_example:latest

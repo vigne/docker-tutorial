@@ -5,15 +5,20 @@ In this repository all files required for the tutorial on Docker are included.
 Please note that the examples used in this material are heavily inspired
 by the ones used in the official [Docker documentation](https://docs.docker.com/get-started/)
 
+Agenda:
+
+1. Basic usage of docker
+2. Building an Image manually (can be skipped)
+3. Building an Image using a `Dockerfile`
+4. Deploy a software stack using `docker-compose`
 
 ## 1. Basics
 
 Read the slides provided on the course webpage to understand the concepts of containers and familiarize
-yourself with the terminology. You may also want to recap the course slides about
-this topic in CeWebs.
+yourself with the terminology.
 
-Multiple tools (e.g. [Portainer.io](https://www.portainer.io/)]) exist to control your docker daemon and deployments.
-In this tutorial though we will stick to CLI tools, as this is common ground on every system.
+Multiple tools (e.g. [Portainer.io](https://www.portainer.io/)) exist to control your docker daemon and deployments.
+In this tutorial though we will stick to CLI tools, as they are common ground on every system.
 
 ### 1.1. Run "Hello World"
 
@@ -28,7 +33,7 @@ python -c 'print "Hello World from Python!"'
 * `python:2.7-slim` ... the image used for the container
 * `python -c '...'` ... the command to be executed inside the container
 
-### 1.2. Use the interactive mode to start interpreter
+### 1.2. Use the Interactive Mode to Start Interpreter
 
 ```
 docker run \
@@ -42,11 +47,11 @@ python
 * `--interactive` ... keeps STDIN/STDOUT open
 * `--tty` ... get its own terminal to avoid issues
 
-## 2. Building an image manually
+## 2. Building an Image Manually
 
-### 2.1 Create container and persist setup
+### 2.1 Create Container and Persist Setup
 
-#### Install dependencies
+#### Install Dependencies
 
 ```
 docker run \
@@ -58,7 +63,7 @@ sh -c "pip install flask redis && mkdir /app"
 * `--name imse_00_prep` ... the name of the container
 * `sh -c "pip install ...` ... command to execute, i.e. install flask and redis using pip and create app folder
 
-#### Copy source code into container
+#### Copy Source Code Into Container
 
 ```
 docker cp \
@@ -68,7 +73,7 @@ imse_00_prep:/app/src
 
 * `docker cp ...` ... copies local files into the container file system
 
-#### Commit changes
+#### Commit Changes
 
 Since you cannot change the command a container was created with, the container
 needs to be persisted into a new image and restarted with a different command.
@@ -81,7 +86,7 @@ docker rm imse_00_prep
 * `docker commit` ... persists the current state of the container into a local image
 * `docker rm` .... removes the stopped container after the image has been created
 
-#### Verify container setup
+#### Verify Container Setup
 
 To check if everything is as intended, create a new container and access it using:
 ```
@@ -95,7 +100,7 @@ bash
 
 `ls /app/src` should show the `app.py` file copied earlier.
 
-### 2.2 Mount local directories into the container at start time
+### 2.2 Mount Local Directories Into the Container at Start Time
 
 During development, updating container as described above can be very cumbersome.
 Thus, one can mount only the source files of your application into the
@@ -120,7 +125,7 @@ python /app/src/app.py
 * `--mount  ...` ... makes a bind mount of the local folder into the container. See [bind mounts](https://docs.docker.com/storage/bind-mounts/) for a detailed explanation.
 * `python /app/src/app.py` ... the command executed on container startup
 
-### 2.3 Create final image
+### 2.3 Create Final Image
 
 When done developing, bundle everything up into one single image for later usage.
 
@@ -151,7 +156,7 @@ imse_app:v0.0 \
 python /app/app.py
 ```
 
-## 3. Build images using a `Dockerfile`
+## 3. Build Images Using a `Dockerfile`
 
 Using so called [Dockerfiles](https://docs.docker.com/engine/reference/builder/) all the above can be described in a single recipe.
 ```
@@ -176,7 +181,7 @@ CMD ["python", "app.py"]
 ```
 
 **Hint:** if you see an error like this `error checking context: 'no permission to read from ` use a `.dockerignore` file
-to exclude files and folder from the build context.
+to exclude files and folders from the build context.
 
 After a successful build, one can run the app like this:
 ```
@@ -205,12 +210,12 @@ imse_app:dev \
 python /app/src/app.py
 ```
 
-## 4. Deploying a software stack using `docker-compose`
+## 4. Deploying a Software Stack Using `docker-compose`
 
+### 4.1 A Simple Example
 A software stack defined in a [compose file](https://docs.docker.com/compose/compose-file/) deploys several services at once. For example, an app needs an instance of Redis to connect to.
 
-See [here for detailed discussion about compose files.
-
+Source: [docker-compose.simple](https://github.com/vigne/docker-tutorial/blob/master/docker-compose.simple)
 ```
 version: "3.2"
 
@@ -233,11 +238,19 @@ services:
     image: redis
 ```
 
-See [docker-compose.yaml]() for a more detailed example utilizing more of the
-compose capabilities and acting as a blueprint for your assigments.
+and deploy the stack using
 
-## 5. Hints and Tips
+```
+docker-compose --file docker-compose.simple up
+```
 
-* Use a [`Makefile`]() to automate and **document** the usage of your services
+### 4.1 A More Complex Example
+
+See this [docker-compose](https://github.com/vigne/docker-tutorial/blob/master/docker-compose.complex) as a blueprint for your assignments. It contains:
+
+* Building the application images(s)
+* Providing a database
+* Providing a database monitoring tool
+* Using a [`Makefile`](https://github.com/vigne/docker-tutorial/blob/master/Makefile) to **document usage**
 * Expose only necessary ports on the host system
-* Define common settings inside a `.env` file
+* Defines common settings inside a [`.env`](https://github.com/vigne/docker-tutorial/blob/master/.env) file
