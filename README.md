@@ -14,7 +14,7 @@ Agenda:
 
 ## 1. Basics
 
-Read the slides provided on the [course web page](https://cewebs.cs.univie.ac.at/imse/ss19/index.php?m=F&t=info&c=afile&CEWebS_what=Info&CEWebS_rev=82&CEWebS_file=IMSE04~32~-~32~Web~32~Engineering~32~ENG.pdf) to understand the concepts of containers and familiarize yourself with the terminology. The tutorial slides can be downloaded [here](https://github.com/vigne/docker-tutorial/blob/master/docker-tutorial-slides.pdf)
+Read the slides provided on the [course web page](https://cewebs.cs.univie.ac.at/imse/ss19/index.php?m=F&t=info&c=afile&CEWebS_what=Info&CEWebS_rev=82&CEWebS_file=IMSE04~32~-~32~Web~32~Engineering~32~ENG.pdf) to understand the concepts of containers and familiarize yourself with the terminology. The tutorial slides can be downloaded [here](https://github.com/vigne/docker-tutorial/blob/master/tutorial-docker-slides.pdf)
 
 Multiple tools (e.g. [Portainer.io](https://www.portainer.io/)) exist to control your docker daemon and deployments.
 In this tutorial though we will stick to CLI tools, as they are common ground on every system.
