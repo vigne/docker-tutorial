@@ -1,0 +1,19 @@
+version: "3.2"
+
+services:
+  # your app(s)
+  imse_app:
+    build:
+      dockerfile: Dockerfile.tutorial
+      context: .
+    image: imse_app:compose
+    ports:
+      - target: 80
+        published: 4000
+        protocol: tcp
+    environment:
+      - "MODE=Prod"
+      - "NAME=Happy Composer"
+
+  redis:
+    image: redis
