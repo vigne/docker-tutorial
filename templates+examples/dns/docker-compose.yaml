@@ -1,0 +1,14 @@
+version: "3.2"
+
+services:
+  host_a:
+    container_name: hostA
+    image: alpine
+    # keep container running
+    command: tail -f /dev/null
+
+  host_b:
+    container_name: hostB
+    image: alpine
+    # keep container running
+    command: tail -f /dev/null
