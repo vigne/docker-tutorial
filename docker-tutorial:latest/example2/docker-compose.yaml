@@ -1,0 +1,22 @@
+version: "3.2"
+
+services:
+  web:
+    image: our_flask_app
+    ports:
+      - target: 5000
+        published: 5000
+        protocol: tcp
+    environment:
+      - "NAME=Stacked-by-Compose"
+    networks:
+      flask:
+
+  redis:
+    image: redis
+    networks:
+      flask:
+
+networks:
+  flask:
+

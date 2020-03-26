@@ -1,0 +1,82 @@
+# To start/stop the services, use docker-compose up/down
+version: "3.2"
+
+services:
+  frontend-dev:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.development
+    image: imse/0303628_frontend_dev
+    volumes:
+      - type: bind
+        source: ./frontend/src
+        target: /app/src
+    ports:
+      - target: 8080
+        published: 8080
+        protocol: tcp
+    depends_on:
+      - backend-dev
+    networks:
+      imsenet:
+
+  backend-dev:
+    build:
+      # set context for build command explicitly
+      context: ./backend
+    ports:
+      - target: 5005
+        published: 5005
+        protocol: tcp
+    image: imse/0303628_backend
+    environment:
+      MONGO_URI: 'mongodb://admin:imse@mongo:27017/slr?authSource=admin'
+      FLASK_DEBUG: 1
+      FLASK_APP: ./app.py
+    volumes:
+      - type: bind
+        source: ./backend
+        target: /backend
+    depends_on:
+      - mongo
+    networks:
+      imsenet:
+
+  mongo:
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: imse
+    # volumes:
+    #   - type: bind
+    #     source: ./data/mongo
+    #     target: /data/db
+    ports:
+      - target: 27017
+        published: 27017
+        protocol: tcp
+    networks:
+      imsenet:
+
+  # utilities
+  mongo-express:
+    image: mongo-express
+    depends_on:
+      - mongo
+    ports:
+      - target: 8081
+        published: 8081
+        protocol: tcp
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: imse
+      ME_CONFIG_MONGODB_ENABLE_ADMIN: "true"
+      ME_CONFIG_MONGODB_SERVER: "mongo"
+    networks:
+      imsenet:
+
+networks:
+  imsenet:
+    attachable: true
+volumes:
+  mongo:
