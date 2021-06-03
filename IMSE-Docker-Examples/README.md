@@ -1,7 +1,6 @@
 # How to run:
 
 1. install Docker, run the Docker Daemon, make sure you are logged in with your Docker-ID and that Docker is running properly.
-Check the [FAQ's](https://cewebs.cs.univie.ac.at/imse/ss20/index.php?m=F&t=info&c=afile&CEWebS_what=Info&CEWebS_rev=26&CEWebS_file=IMSE~32~Docker~32~FAQ%27s~32~SS2020.pdf) on the CeWebs Info page I've made to see how to install Docker.
 2. clone this repo and navigate into any one of the projects.
 3. run command:
 
